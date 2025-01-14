@@ -1,0 +1,19 @@
+{
+  "name": "netherworldsonline",
+  "version": "1.0.0",
+  "description": "dependencies for netherworldsOnline",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vaddi98/NetherworldsOnline.git"
+  },
+  "author": "Vaddi98",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Vaddi98/NetherworldsOnline/issues"
+  },
+  "homepage": "https://github.com/Vaddi98/NetherworldsOnline#readme"
+}
