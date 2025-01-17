@@ -22,6 +22,11 @@ function setCookie(cname, cvalue, exdays) {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
+function expireCookie(cname) {
+    let expires = "expires="+"Thu, 18 Dec 2013 12:00:00 UTC;";
+    document.cookie = cname + "=" + "" + ";" + expires + ";path=/";
+}
+
 function getCookie(cname) {
     let name = cname + "=";
     let ca = document.cookie.split(';');
@@ -50,9 +55,16 @@ async function authenticateToken(token){
             }
         });
 
-    let res = await response.text();
-    alert(res);
+    let res = JSON.parse(await response.text());
+        if(res.http=== 200 &&res.instruction === 'valid-token'){
+            alert("Token has been successfully verified.");
+        }else{
+            expireCookie('authToken');
+            alert("Redirecting to the login page.");
+            window.location.reload();
+        }
 }
+
 async function loginUser(){
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
