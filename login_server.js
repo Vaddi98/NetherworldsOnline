@@ -6,6 +6,7 @@ const { join } = require('node:path');
 const bcrypt = require('bcrypt');
 let fs = require('fs');
 
+
 const app = express();
 app.use(express.json());
 const server = createServer(app);
@@ -98,6 +99,22 @@ app.post("/login", (req, res) => {
 
 app.get('/login_form', (req, res) => {
     res.sendFile(join(__dirname, './src/login_form.html'));
+})
+
+app.post('/auth/token/verify', (req, res) => {
+    const token = req.body.token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    let timestamp = Date.now();
+
+    timestamp = timestamp.toString();
+    timestamp = timestamp.substring(0, timestamp.length - 3);
+    timestamp = parseInt(timestamp);
+
+        if(decoded.iat <= timestamp && decoded.exp >= timestamp){
+            res.send({http: 200, instruction:"valid-token"});
+        }else{
+            res.send({http: 200, instruction:"bad-token"})
+        }
 })
 
 // -------------------------------------------------------------------------------------------------------------

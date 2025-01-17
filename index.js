@@ -2,6 +2,9 @@ let authToken = getCookie('authToken');
 
 if(authToken){
     console.log("token found - redirect to game");
+    authenticateToken(authToken).then(res =>{
+
+    })
 }else{
     console.log("no token found");
     setRegistrationForm('./registration_form').
@@ -34,6 +37,22 @@ function getCookie(cname) {
     return false;
 }
 
+async function authenticateToken(token){
+    const response = await fetch('/auth/token/verify',
+        {
+            method: 'POST',
+            body: JSON.stringify(
+                {
+                    token:token
+                }),
+            headers: {
+                "Content-type": "application/json"
+            }
+        });
+
+    let res = await response.text();
+    alert(res);
+}
 async function loginUser(){
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
