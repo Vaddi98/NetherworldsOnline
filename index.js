@@ -1,10 +1,8 @@
 let authToken = getCookie('authToken');
 
 if(authToken){
-    console.log("token found - redirect to game");
     authenticateToken(authToken).then(res =>{
-
-    })
+    });
 }else{
     console.log("no token found");
     setRegistrationForm('./registration_form').
@@ -12,8 +10,6 @@ if(authToken){
         setLoginForm("./login_form");
     });
 }
-//load auth forms
-
 
 function setCookie(cname, cvalue, exdays) {
     const d = new Date();
@@ -42,6 +38,12 @@ function getCookie(cname) {
     return false;
 }
 
+function loadGameClient(){
+    const DOM_NWOCLIENT = document.getElementById('gameClient');
+    DOM_NWOCLIENT.innerHTML = '<h1>GAME CLIENT DATA</h1>';
+
+}
+
 async function authenticateToken(token){
     const response = await fetch('/auth/token/verify',
         {
@@ -56,13 +58,12 @@ async function authenticateToken(token){
         });
 
     let res = JSON.parse(await response.text());
-        if(res.http=== 200 &&res.instruction === 'valid-token'){
-            alert("Token has been successfully verified.");
-        }else{
-            expireCookie('authToken');
-            alert("Redirecting to the login page.");
-            window.location.reload();
-        }
+    if(res.http=== 200 &&res.instruction === 'valid-token'){
+        loadGameClient();
+    }else{
+        expireCookie('authToken');
+        window.location.reload();
+    }
 }
 
 async function loginUser(){

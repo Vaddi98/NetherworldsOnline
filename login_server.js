@@ -117,6 +117,11 @@ app.post('/auth/token/verify', (req, res) => {
         }
 })
 
+app.get('/game', (req, res) => {
+    const token = req.body.token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+})
+
 // -------------------------------------------------------------------------------------------------------------
 //scripts
 //endpoints for scripts required to run html/javascript modules.
