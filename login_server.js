@@ -102,8 +102,7 @@ app.get('/login_form', (req, res) => {
 })
 
 app.post('/auth/token/verify', (req, res) => {
-    const token = req.body.token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const decoded = jwt.verify(req.body.token, process.env.JWT_SECRET_KEY);
     let timestamp = Date.now();
 
     timestamp = timestamp.toString();
@@ -117,9 +116,22 @@ app.post('/auth/token/verify', (req, res) => {
         }
 })
 
-app.get('/game', (req, res) => {
-    const token = req.body.token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+app.post('/game', (req, res) => {
+    const decoded = jwt.verify(req.body.token, process.env.JWT_SECRET_KEY);
+    if(!decoded){
+        res.send({http: 200, instruction:"bad-token"})
+    }
+    let timestamp = Date.now();
+
+    timestamp = timestamp.toString();
+    timestamp = timestamp.substring(0, timestamp.length - 3);
+    timestamp = parseInt(timestamp);
+
+    if(decoded.iat <= timestamp && decoded.exp >= timestamp){
+        res.sendFile(join(__dirname, './src/game.html'));
+    }else{
+        res.send({http: 200, instruction:"bad-token"})
+    }
 })
 
 // -------------------------------------------------------------------------------------------------------------

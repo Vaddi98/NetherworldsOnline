@@ -1,8 +1,8 @@
 let authToken = getCookie('authToken');
 
 if(authToken){
-    authenticateToken(authToken).then(res =>{
-    });
+   loadGameClient(authToken)
+
 }else{
     console.log("no token found");
     setRegistrationForm('./registration_form').
@@ -38,9 +38,20 @@ function getCookie(cname) {
     return false;
 }
 
-function loadGameClient(){
-    const DOM_NWOCLIENT = document.getElementById('gameClient');
-    DOM_NWOCLIENT.innerHTML = '<h1>GAME CLIENT DATA</h1>';
+async function loadGameClient(token){
+    const DOM_NWO_CLIENT = document.getElementById('gameClient');
+    const response = await fetch('/game',{
+        method: 'POST',
+        body: JSON.stringify(
+            {
+                token:token
+            }),
+        headers: {
+            "Content-type": "application/json"
+        }
+    });
+
+    DOM_NWO_CLIENT.innerHTML = await response.text();
 
 }
 
